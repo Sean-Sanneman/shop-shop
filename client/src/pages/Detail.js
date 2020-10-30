@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from '@apollo/react-hooks';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Cart from "../components/Cart";
-import { useStoreContext } from "../utils/GlobalState";
 import {
   REMOVE_FROM_CART,
   UPDATE_CART_QUANTITY,
@@ -15,7 +15,8 @@ import { idbPromise } from "../utils/helpers";
 import spinner from '../assets/spinner.gif'
 
 function Detail() {
-  const [state, dispatch] = useStoreContext();
+  const dispatch = useDispatch();
+  const state = useSelector(state => state);
   const { id } = useParams();
 
   const [currentProduct, setCurrentProduct] = useState({});
@@ -28,7 +29,7 @@ function Detail() {
     // already in global store
     if (products.length) {
       setCurrentProduct(products.find(product => product._id === id));
-    }
+    } 
     // retrieved from server
     else if (data) {
       dispatch({
@@ -103,8 +104,8 @@ function Detail() {
             <button onClick={addToCart}>
               Add to Cart
             </button>
-            <button
-              disabled={!cart.find(p => p._id === currentProduct._id)}
+            <button 
+              disabled={!cart.find(p => p._id === currentProduct._id)} 
               onClick={removeFromCart}
             >
               Remove from Cart
